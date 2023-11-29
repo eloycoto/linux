@@ -9,6 +9,7 @@ use crate::{
     device::RawDevice,
     driver::{self, RawDeviceId},
     error::{from_result, to_result, Result},
+    of,
     str::{BStr, CStr},
     types::ForeignOwnable,
     ThisModule,
@@ -106,6 +107,9 @@ impl<T: Driver> driver::DriverOps for Adapter<T> {
         if let Some(t) = T::I2C_DEVICE_ID_TABLE {
             i2cdrv.id_table = t.as_ref();
         }
+        if let Some(t) = T::OF_DEVICE_ID_TABLE {
+            i2cdrv.driver.of_match_table = t.as_ref();
+        }
 
         // SAFETY:
         //   - `pdrv` lives at least until the call to `platform_driver_unregister()` returns.
@@ -168,6 +172,9 @@ pub trait Driver {
 
     /// The table of device ids supported by the driver.
     const I2C_DEVICE_ID_TABLE: Option<driver::IdTable<'static, DeviceId, Self::IdInfo>> = None;
+
+    /// The table of device ids supported by the driver.
+    const OF_DEVICE_ID_TABLE: Option<driver::IdTable<'static, of::DeviceId, Self::IdInfo>> = None;
 
     /// I2C driver probe.
     ///
