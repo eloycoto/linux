@@ -23,6 +23,7 @@
 #include <linux/platform_device.h>
 #include <linux/poll.h>
 #include <linux/refcount.h>
+#include <linux/regmap.h>
 #include <linux/sched.h>
 #include <linux/security.h>
 #include <linux/slab.h>
