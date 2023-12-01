@@ -111,6 +111,19 @@
 	};
 };
 
+&blsp_i2c4 {
+	status = "okay";
+
+	regulator@1c {
+		compatible = "onnn,ncv6336";
+		reg = <0x1c>;
+		pinctrl-0 = <&ncv6336_vsel>;
+		pinctrl-names = "default";
+		regulator-min-microvolt = <600000>;
+		regulator-max-microvolt = <1393750>;
+	};
+};
+
 &blsp_i2c5 {
 	status = "okay";
 };
@@ -370,6 +383,12 @@
 		function = "gpio";
 		pins = "gpio107";
 		bias-pull-up;
+	};
+
+	ncv6336_vsel: ncv6336-state  {
+		function = "gpio";
+		pins = "gpio111";
+		output-low;
 	};
 };
 
