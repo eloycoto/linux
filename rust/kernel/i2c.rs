@@ -6,7 +6,7 @@
 
 use crate::{
     bindings,
-    device::RawDevice,
+    device::{Device, RawDevice},
     driver::{self, RawDeviceId},
     error::{from_result, to_result, Result},
     of,
@@ -212,6 +212,13 @@ impl Client {
     /// Returns the raw I2C client structure
     pub fn raw_client(&self) -> *mut bindings::i2c_client {
         self.ptr
+    }
+
+    /// Returns the I2C client [`Device`] structure
+    pub fn device(&self) -> Device {
+        Device {
+            ptr: self.raw_device(),
+        }
     }
 }
 
