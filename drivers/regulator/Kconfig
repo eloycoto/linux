@@ -934,6 +934,13 @@ config REGULATOR_MTK_DVFSRC
 	  of Mediatek. It allows for voting on regulator state
 	  between multiple users.
 
+config REGULATOR_NCV6336
+	tristate "Onsemi NCV6336 regulator driver"
+	depends on RUST
+	select REGMAP_I2C
+	help
+	  Say y here to select to support the Onsemi NCV6336 buck converter.
+
 config REGULATOR_PALMAS
 	tristate "TI Palmas PMIC Regulators"
 	depends on MFD_PALMAS
