@@ -7,7 +7,8 @@ fn concat(tokens: &[TokenTree], group_span: Span) -> TokenTree {
     let mut segments = Vec::new();
     let mut span = None;
     loop {
-        match tokens.next() {
+        let t = tokens.next();
+        match t {
             None => break,
             Some(TokenTree::Literal(lit)) => {
                 // Allow us to concat string literals by stripping quotes
@@ -45,6 +46,19 @@ fn concat(tokens: &[TokenTree], group_span: Span) -> TokenTree {
                     v => panic!("unknown modifier `{v}`"),
                 };
                 segments.push((value, sp));
+            }
+            Some(TokenTree::Group(group)) => {
+                let stream: Vec<_> = group.stream().into_iter().collect();
+                if let TokenTree::Literal(lit) = &stream[0] {
+                    let mut value = lit.to_string();
+                    if value.starts_with('"') && value.ends_with('"') {
+                        value.remove(0);
+                        value.pop();
+                    }
+                    segments.push((value, lit.span()));
+                } else {
+                    panic!("unexpected token in paste segments");
+                }
             }
             _ => panic!("unexpected token in paste segments"),
         };
